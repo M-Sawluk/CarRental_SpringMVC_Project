@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+	<secured attributes="ROLE_USER, ROLE_ADMIN" match="any"  />
+
+	<var name="order" class="com.michal.carRental.domain.Order" />
+
+	<action-state id="addPlayer">
+		<evaluate expression="userServiceImpl.getUserByUserName(currentUser.name)" result="order.user" />
+		<transition to="addCar" />
+	</action-state>
+	
+	<action-state id="addCar">
+		<evaluate expression="productServiceImpl.findCarByCarId(requestParameters.carId)" result="order.car" />
+		<transition to="addCarList" />
+	</action-state>
+	
+	<action-state id="addCarList">
+		<evaluate expression="productServiceImpl.getAllCars()" result="order.cars" />
+		<transition to="addPlaceList" />
+	</action-state>
+	
+	<action-state id="addPlaceList">
+		<evaluate expression="rentingPlaceServiceImpl.getPlaceList()" result="order.places" />
+		<transition to="orderForm" />
+	</action-state>
+
+	<view-state id="orderForm" view="orderForm.jsp" model="order">
+		<binder>
+			<binding property="rentStart"/>
+			<binding property="rentEnd" />
+			<binding property="selectedPlace" />
+			<binding property="selectedCar" />
+		</binder>
+		<transition on="orderDone" to="fillPlce" validate="true" bind="true" />
+		<transition on="cancel" to="endState" validate="false" bind="false"  />
+	</view-state>
+	
+	<action-state id="fillPlce">
+		<evaluate expression="rentingPlaceServiceImpl.getRentingPlaceById(order.selectedPlace)" result="order.rentingPlace" />
+		<transition to="fillCar" />
+	</action-state>
+	
+	<action-state id="fillCar">
+		<evaluate expression="productServiceImpl.fillCar(order)" result="order.car" />
+		<transition to="orderConfirmation" />
+	</action-state>
+	
+	<view-state id="orderConfirmation" view="orderConfirmation.jsp" model="order">
+		<transition on="accepted" to="validOrder" />
+		<transition on="cancel" to="endState" />
+	</view-state>
+	
+	<action-state id="validOrder">
+		<evaluate expression="orderServiceImpl.validOrder(order)" result="order" />
+		<transition to="InvalidCarWarning" on-exception="com.michal.carRental.exception.InvalidCarException" />
+		<transition to="saveOrder" />
+	</action-state>
+	
+	<action-state id="saveOrder">
+		<evaluate expression="orderServiceImpl.saveOrder(order)" />
+		<transition to="thankCustomer" />
+	</action-state>
+	
+	<view-state id="thankCustomer">
+		<transition to="endState" />
+	</view-state>
+	
+	<view-state id="InvalidCarWarning">
+		<transition to="endState" />
+	</view-state>
+	
+	<end-state id="endState" view="flowRedirect:/" />
+
+	<global-transitions>
+		<transition on="cancel" to="endState" />
+	</global-transitions>
+</flow>

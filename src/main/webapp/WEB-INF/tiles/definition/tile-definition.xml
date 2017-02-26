@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD TilesConfiguration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="baseLayout" template="/WEB-INF/tiles/template/baseLayout.jsp">
+		<put-attribute name="title" value="Przykładowy tytuł" />
+		<put-attribute name="heading" value="" />
+		<put-attribute name="tagline" value="" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/tiles/template/navigation.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer"
+			value="/WEB-INF/tiles/template/footer.jsp" />
+	</definition>
+	
+	<definition name="welcome" extends="baseLayout">
+		<put-attribute name="title" value="Home" />
+		<put-attribute name="heading" value="?" />
+		<put-attribute name="tagline" value="?" />
+		<put-attribute name="current" value="home" cascade="true"/>
+		<put-attribute name="content" value="/WEB-INF/view/welcome.jsp" />
+	</definition>
+	
+	<definition name="contacts" extends="baseLayout">
+		<put-attribute name="title" value="Contacts" />
+		<put-attribute name="heading" value="?" />
+		<put-attribute name="tagline" value="?" />
+		<put-attribute name="current" value="contacts" cascade="true"/>
+		<put-attribute name="content" value="/WEB-INF/view/contacts.jsp" />
+	</definition>
+	
+	<definition name="userPage" extends="baseLayout">
+		<put-attribute name="title" value="UserPage" />
+		<put-attribute name="heading" value="?" />
+		<put-attribute name="tagline" value="?" />
+		<put-attribute name="current" value="userPage" cascade="true"/>
+		<put-attribute name="content" value="/WEB-INF/view/userPage.jsp" />
+	</definition>
+	<definition name="adminPage" extends="baseLayout">
+		<put-attribute name="title" value="AdminPage" />
+		<put-attribute name="heading" value="?" />
+		<put-attribute name="tagline" value="?" />
+		<put-attribute name="current" value="adminPage" cascade="true"/>
+		<put-attribute name="content" value="/WEB-INF/view/adminPage.jsp" />
+	</definition>
+	<definition name="rent" extends="baseLayout">
+		<put-attribute name="title" value="Rent a Car" />
+		<put-attribute name="heading" value="?" />
+		<put-attribute name="tagline" value="?" />
+		<put-attribute name="current" value="rent" cascade="true"/>
+		<put-attribute name="content" value="/WEB-INF/view/rent.jsp" />
+	</definition>
+	
+</tiles-definitions>

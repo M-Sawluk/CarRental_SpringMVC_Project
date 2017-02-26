@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd
+    http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task.xsd
+	">
+
+	<context:component-scan base-package="com.michal.carRental" >
+	  <context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<mvc:annotation-driven />
+	
+	<!-- Password Encrypter -->
+	<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	<!-- End -->
+	
+	
+	<!-- To prevent browser's back button on displaying secured resource after 
+		logout -->
+		
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="cacheSeconds" value="0" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/carrental" />
+		<property name="username" value="Your username" />
+		<property name="password" value="your password" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource" />
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.michal.carRental.domain.User</value>
+				<value>com.michal.carRental.domain.Role</value>
+				<value>com.michal.carRental.domain.Car</value>
+				<value>com.michal.carRental.domain.RentingPlace</value>	
+				<value>com.michal.carRental.domain.CarStorage</value>		
+			  	<value>com.michal.carRental.domain.Order</value>		
+			  	<value>com.michal.carRental.domain.Subscriber</value>		
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+				hibernate.show_sql=true
+		 		<!--  hibernate.hbm2ddl.auto=create -->
+			</value>
+		</property>
+	</bean>
+
+	<tx:annotation-driven />
+	
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10240000"/>
+	</bean>
+
+	<!--  mailer beans--> 
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="longer11989" />
+		<property name="password" value="1235sawluk" />
+	
+		<property name="javaMailProperties">
+		   <props>
+	       	      <prop key="mail.smtp.auth">true</prop>
+	       	      <prop key="mail.smtp.starttls.enable">true</prop>
+	       </props>
+		</property>
+	</bean>
+	
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean" p:resourceLoaderPath="classpath:/velocity/" />
+    
+	
+	<util:properties id="contactServiceProps" location="classpath:/spring/contactService.properties" />
+	<util:properties id="mailingListServiceProps" location="classpath:/spring/mailingListService.properties" />
+	
+	<task:annotation-driven/>
+	<task:executor id="executor" pool-size="5-10" queue-capacity="100" keep-alive="300" />
+	<!-- end mailer -->
+	
+	<!-- restTamplate -->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+			<constructor-arg ref="httpRequestFactory" />
+		       <property name="messageConverters">
+					<list>
+						<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+					</list>
+				</property>
+	 </bean>
+	 
+	 <bean id="httpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory" >
+	 	<constructor-arg ref="httpCustomClient" /> 	
+	 </bean>
+	 
+	 <bean id="httpCustomClient" class="org.apache.http.client.HttpClient" factory-bean="httpClientBuilder" factory-method="build" />
+	 
+	 <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder" factory-method="create" />
+	
+	<util:properties id="reCaptcha" location="classpath:/spring/reCaptcha.properties" />
+	
+	<!-- End restTemplate -->
+</beans>
