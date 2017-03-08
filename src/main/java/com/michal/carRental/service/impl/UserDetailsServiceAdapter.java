@@ -18,11 +18,16 @@ import com.michal.carRental.service.UserDetailsDaoService;
 @Service("userDetailsService")
 public class UserDetailsServiceAdapter implements UserDetailsService {
 
-	@Autowired
 	private UserServiceImpl userServiceImpl;
 
-	@Autowired
 	private UserDetailsDaoService userDetailsDaoService;
+
+	@Autowired
+	public UserDetailsServiceAdapter(UserServiceImpl userServiceImpl, UserDetailsDaoService userDetailsDaoService) {
+		this.userServiceImpl = userServiceImpl;
+		this.userDetailsDaoService = userDetailsDaoService;
+	}
+
 
 	@Transactional(readOnly=true)
 	@Override

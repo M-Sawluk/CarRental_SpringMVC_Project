@@ -27,15 +27,21 @@ import com.michal.carRental.service.SubscriberService;
 @Service
 public class MailingListServiceImpl implements MailingListService{
 
-	@Autowired
 	private SubscriberService subscriberService;
 	
-	@Autowired
 	private JavaMailSender javaMailSender;
 	
-	@Autowired
 	private VelocityEngine velocityEngine;
 	
+	@Autowired
+	public MailingListServiceImpl(SubscriberService subscriberService, JavaMailSender javaMailSender,
+			VelocityEngine velocityEngine) {
+		super();
+		this.subscriberService = subscriberService;
+		this.javaMailSender = javaMailSender;
+		this.velocityEngine = velocityEngine;
+	}
+
 	private static final String SUBSCRIBE_TEMPLATE_PATH = "mailingListSubscribe.vm";
 
 	private static final long ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;

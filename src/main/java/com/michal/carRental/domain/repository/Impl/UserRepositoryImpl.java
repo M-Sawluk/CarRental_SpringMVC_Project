@@ -18,13 +18,15 @@ import com.michal.carRental.domain.repository.UserRepository;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-	@Autowired
 	private SessionFactory session;
-	
-	@Autowired
+
 	private BCryptPasswordEncoder bcryptEncoder;
 	
-	
+	@Autowired
+	public UserRepositoryImpl(SessionFactory session, BCryptPasswordEncoder bcryptEncoder) {
+		this.session = session;
+		this.bcryptEncoder = bcryptEncoder;
+	}
 
 	@Transactional
 	public void createUser(User user) {
@@ -58,6 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
 		session.getCurrentSession().update(user);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<User> getUserList()
 	{

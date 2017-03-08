@@ -8,8 +8,6 @@ import com.michal.carRental.domain.Order;
 import com.michal.carRental.domain.User;
 
 public interface OrderRepository {
-
-	boolean checkAvailability(long carId,long placeId, Date start, Date end);
 	
 	void saveOrder(Order order);
 	
@@ -24,4 +22,8 @@ public interface OrderRepository {
 	Order findOrderById(long id);
 	
 	void updateOrder(Order order);
+	
+	Integer getOrdersInSpecificPeriodOfTimeWithCarIdAndPlaceId(long carId, long placeId, Date start, Date end);
+	
+	Integer getUnitsOfCarInSpecificPlace(long carId, long placeId);
 }

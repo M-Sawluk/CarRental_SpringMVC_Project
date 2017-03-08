@@ -9,28 +9,29 @@ import com.michal.carRental.service.UserDetailsDaoService;
 @Service
 public class JdbcUserDetailsDaoService implements UserDetailsDaoService {
 
-	@Autowired
 	private UserDetailsDao userDetailsDao;
-	
-	
-	@Override
-	public String findPasswordByUsername(String username) {
-		
-		return userDetailsDao.findPasswordByUsername(username); 
-		
 
+	@Autowired
+	public JdbcUserDetailsDaoService(UserDetailsDao userDetailsDao) {
+
+		this.userDetailsDao = userDetailsDao;
 	}
 
+	@Override
+	public String findPasswordByUsername(String username) {
+
+		return userDetailsDao.findPasswordByUsername(username);
+	}
 
 	@Override
 	public boolean checkEmail(String email) {
-		
+
 		return userDetailsDao.checkEmail(email);
 	}
-	
+
 	@Override
-	public boolean checkUserName(String userName){
-		
+	public boolean checkUserName(String userName) {
+
 		return userDetailsDao.checkUserName(userName);
 	}
 

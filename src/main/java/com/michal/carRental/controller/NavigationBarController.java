@@ -6,35 +6,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.michal.carRental.service.ProductService;
-  
+
 @Controller
-public class NavigationBarController 
-{
-	@Autowired
+public class NavigationBarController {
 	private ProductService productService;
-	
+
+	@Autowired
+	public NavigationBarController(ProductService productService) {
+		this.productService = productService;
+	}
+
 	@RequestMapping("/contacts")
 	public String contacts(Model model) {
-		
+
 		return "contacts";
 	}
-	
-	
+
 	@RequestMapping("/carrent")
 	public String carRent(Model model) {
-		
-		try
-		{
-		model.addAttribute("cars" , productService.getAllCars());
-		}
-		catch(Exception e)
-		{
+
+		try {
+			model.addAttribute("cars", productService.getAllCars());
+		} catch (Exception e) {
 			return "rent";
 		}
-		
-		
+
 		return "rent";
 	}
-	
-	
+
 }

@@ -1,6 +1,5 @@
 package com.michal.carRental.controller;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,39 +12,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.michal.carRental.service.ProductService;
 
-
-
-
 @Controller
 public class ProductController {
 
-	@Autowired
 	private ProductService productService;
-		
+
+	@Autowired
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
+
 	@RequestMapping("/carrent/search")
-	public String searchCarName(@RequestParam("name") String carName ,Model model)
-	{
-	
+	public String searchCarName(@RequestParam("name") String carName, Model model) {
+
 		model.addAttribute("cars", productService.findCarByName(carName));
 
 		return "rent";
-		
+
 	}
-	
 
 	@RequestMapping("/carrent/{ByCriteria}")
-	public String searchCar(Model model,@MatrixVariable(pathVar="ByCriteria") Map<String,List<String>> filterParams ,@RequestParam("name") String name)
-	{
-		
+	public String searchCar(Model model, @MatrixVariable(pathVar = "ByCriteria") Map<String, List<String>> filterParams,
+			@RequestParam("name") String name) {
+
 		model.addAttribute("cars", productService.getProductsByFilter(filterParams, name));
-		
 
 		return "rent";
-		
-	}
-	
-	
-	
-	
-}
 
+	}
+
+}

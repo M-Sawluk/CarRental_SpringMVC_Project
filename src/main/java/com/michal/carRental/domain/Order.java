@@ -19,7 +19,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -64,6 +63,7 @@ public class Order implements Serializable{
 	private OrderStatus status;
 		
 
+	@SuppressWarnings("unused")
 	private int price;
 
 	//Helpers

@@ -13,9 +13,13 @@ import com.michal.carRental.service.RentingPlaceService;
 @Service
 public class RentingPlaceServiceImpl implements RentingPlaceService{
 
-	@Autowired
 	private RentingPlaceRepository reningPlaceRepository;
 	
+	@Autowired
+	public RentingPlaceServiceImpl(RentingPlaceRepository reningPlaceRepository) {
+		this.reningPlaceRepository = reningPlaceRepository;
+	}
+
 	public void addPlace(RentingPlace place)
 	{
 		reningPlaceRepository.addPlace(place);

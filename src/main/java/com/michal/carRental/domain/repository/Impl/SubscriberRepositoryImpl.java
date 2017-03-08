@@ -11,9 +11,13 @@ import com.michal.carRental.domain.repository.SubscriberRepository;
 @Repository
 public  class SubscriberRepositoryImpl implements SubscriberRepository {
 
-	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@Autowired
+	public SubscriberRepositoryImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	@Override
 	@Transactional
 	public void addSubscriber(Subscriber subscriber) {

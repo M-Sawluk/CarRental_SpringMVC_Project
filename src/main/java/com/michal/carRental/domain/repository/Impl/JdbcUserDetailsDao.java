@@ -8,14 +8,18 @@ import com.michal.carRental.domain.repository.UserDetailsDao;
 
 @Repository
 public class JdbcUserDetailsDao implements UserDetailsDao {
-	
-	@Autowired
+
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	public JdbcUserDetailsDao(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	private static final String FIND_PASSWORD_SQL = "select password from user where username = ?";
 
 	private static final String FIND_EMAIL_SQL = "select name from user where email = ?";
-	
+
 	private static final String FIND_USERNAME_SQL = "select name from user where username = ?";
 
 	public String findPasswordByUsername(String username) {
@@ -26,7 +30,6 @@ public class JdbcUserDetailsDao implements UserDetailsDao {
 
 		String test = jdbcTemplate.queryForObject(FIND_EMAIL_SQL, new Object[] { email }, String.class);
 
-	
 		if (test == null) {
 			return false;
 		} else {
@@ -34,12 +37,11 @@ public class JdbcUserDetailsDao implements UserDetailsDao {
 		}
 
 	}
-	
+
 	public boolean checkUserName(String userName) {
 
 		String test = jdbcTemplate.queryForObject(FIND_USERNAME_SQL, new Object[] { userName }, String.class);
 
-	
 		if (test == null) {
 			return false;
 		} else {
